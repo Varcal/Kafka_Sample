@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Confluent.Kafka;
 
 namespace Kafka_Producer
 {
@@ -9,6 +10,8 @@ namespace Kafka_Producer
         {
             var bookingProducer = new BookingProducer();
             await bookingProducer.Produce("Minha primeira mensagem");
+
+            Console.ReadKey();
         }
     }
 }
