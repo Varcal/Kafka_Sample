@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+  zookeeper:
+    container_name: 'vs_zookeeper'
+    image: wurstmeister/zookeeper
+    ports:
+      - "2181:2181"
+    networks: 
+      - varcalsys-network 
+      
+  kafka:
+    container_name: 'vs_kafka'
+    image: wurstmeister/kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: 127.0.0.1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_CREATE_TOPICS: "mytopic:3:1"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks: 
+      - varcalsys-network 
+  
+  sqlserver:
+    container_name: 'vs_mssql'
+    image: mcr.microsoft.com/mssql/server:2017-CU8-ubuntu
+    environment: 
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "Admin@123"
+    ports:
+      - "1433:1433"
+    volumes:
+      - ./mssql:/var/opt/mssql
+    networks: 
+      - varcalsys-network 
+      
+networks: 
+  varcalsys-network:
+    driver: bridge
